@@ -57,7 +57,7 @@ class _SplashScreenState extends State<SplashScreen> {
 
   void _navigateToNextScreen() {
     if(!mounted) return;
-    final bool onboardingComplete = StorageService.instance.isOnboardingComplete;
+    final bool onboardingComplete = false;
 
     /*Navigator.pushReplacement(context,
       MaterialPageRoute<void>(

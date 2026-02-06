@@ -46,4 +46,8 @@ class StorageService {
     return _prefs.getBool(_keyOnboardingConmplete) ?? false;
   }
 
+  set isOnboardingComplete(bool value) {
+    _prefs.setBool(_keyOnboardingConmplete, value);
+  }
+
 }
