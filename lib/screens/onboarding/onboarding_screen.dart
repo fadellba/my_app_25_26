@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:sunuTask/core/constants/app_colors.dart';
 import 'package:sunuTask/core/constants/app_strings.dart';
 import 'package:sunuTask/services/storage_service.dart';
@@ -34,20 +35,27 @@ class _OnboardingScreenState extends State<OnboardingScreen>{
   int currentPage = 0;
   bool isLastPage = false;
 
-  OnboardinItem item1 = OnboardinItem(title: AppStrings.onboardingTitle1, description: AppStrings.onboardingDesc1, icon: null, color: AppColors.primary);
-  OnboardinItem item2 = OnboardinItem(title: AppStrings.onboardingTitle2, description: AppStrings.onboardingDesc2, icon: null, color: AppColors.primary);
-  OnboardinItem item3 = OnboardinItem(title: AppStrings.onboardingTitle3, description: AppStrings.onboardingDesc3, icon: null, color: AppColors.primary);
+  OnboardinItem item1 = OnboardinItem(title: AppStrings.onboardingTitle1, description: AppStrings.onboardingDesc1, icon: Icon(Icons.task_alt), color: AppColors.background);
+  OnboardinItem item2 = OnboardinItem(title: AppStrings.onboardingTitle2, description: AppStrings.onboardingDesc2, icon: Icon(Icons.task_alt), color: AppColors.background);
+  OnboardinItem item3 = OnboardinItem(title: AppStrings.onboardingTitle3, description: AppStrings.onboardingDesc3, icon: Icon(Icons.task_alt), color: AppColors.background);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: AppColors.background,
        title: Padding(
          padding: EdgeInsets.all(20),
          child: Row (
            mainAxisAlignment: MainAxisAlignment.end,
-           children: [
+           children: !isLastPage ? [
              TextButton(
+               style: TextButton.styleFrom(
+                 backgroundColor: AppColors.primary,
+                 padding: EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+                 side: BorderSide(color: AppColors.primary, width: 2),
+                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
+               ),
                onPressed: () {
                   StorageService.instance.isOnboardingComplete = true;
                   Navigator.pushReplacement(
@@ -64,9 +72,9 @@ class _OnboardingScreenState extends State<OnboardingScreen>{
                       )
                   );
                },
-               child: Text('Skip'),
+               child: Text('Skip',style: TextStyle(fontSize: 18,color: AppColors.white)),
              )
-           ],
+           ] : [],
          ),
        ),
       ),
@@ -88,10 +96,7 @@ class _OnboardingScreenState extends State<OnboardingScreen>{
                 color: item1.color,
                 child: Column(
                   children: [
-                    Padding(
-                      padding: EdgeInsets.all(30),
-                      child: Image.asset("assets/images/onboarding/Sandy_Bus-09_Single-11.jpg"),
-                    ),
+                    Padding(padding: EdgeInsets.all(30),),
                     Center(
                       child: Text(
                         item1.title,
@@ -118,7 +123,6 @@ class _OnboardingScreenState extends State<OnboardingScreen>{
                   children: [
                     Padding(
                       padding: EdgeInsets.all(30),
-                      child: Image.asset("assets/images/onboarding/Sandy_Bus-09_Single-11.jpg"),
                     ),
                     Center(
                       child: Text(
@@ -146,10 +150,11 @@ class _OnboardingScreenState extends State<OnboardingScreen>{
                   children: [
                     Padding(
                       padding: EdgeInsets.all(30),
-                      child: Image.asset("assets/images/onboarding/Sandy_Bus-09_Single-11.jpg"),
                     ),
                     Center(
+
                       child: Text(
+
                         item3.title,
                         style: TextStyle(fontSize: 35,fontWeight: FontWeight.bold),
                       ),
@@ -176,6 +181,12 @@ class _OnboardingScreenState extends State<OnboardingScreen>{
               mainAxisAlignment: isLastPage ? MainAxisAlignment.center : MainAxisAlignment.spaceBetween,
               children: isLastPage ? [
                 TextButton(
+                  style: TextButton.styleFrom(
+                    backgroundColor: AppColors.primary,
+                    padding: EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+                    side: BorderSide(color: AppColors.primary, width: 2),
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
+                  ),
                   onPressed: () {
                     StorageService.instance.isOnboardingComplete = true;
                     Navigator.pushReplacement(
@@ -192,26 +203,47 @@ class _OnboardingScreenState extends State<OnboardingScreen>{
                         )
                     );
                   },
-                  child: Text('Done'),
+                  child: Text('Done',style: TextStyle(fontSize: 18,color: AppColors.white)),
                 ),
               ] : [
                 TextButton(
+                  style: TextButton.styleFrom(
+                    backgroundColor: currentPage == 0 ? AppColors.background : AppColors.primary,
+                    padding: EdgeInsets.symmetric(horizontal:  20, vertical:  8),
+                    side: BorderSide(color: currentPage == 0 ? AppColors.background : AppColors.primary, width:  2),
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular( 5)),
+                  ),
                   onPressed: () {
                     pageController.previousPage(
                       duration: Duration(milliseconds: 500),
                       curve: Curves.linear,
                     );
                   },
-                  child: Text(currentPage == 0 ? '' : 'Back'),
+                  child: Text(currentPage == 0 ? '' : 'Back',style: TextStyle(fontSize: 18,color: AppColors.white)),
+                ),
+                SmoothPageIndicator(
+                  controller: pageController,
+                  count: 3,
+                  effect: WormEffect(
+                    dotHeight: 8,
+                    dotWidth: 8,
+                    activeDotColor: AppColors.primary,
+                  )
                 ),
                 TextButton(
+                  style: TextButton.styleFrom(
+                    backgroundColor: AppColors.primary,
+                    padding: EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+                    side: BorderSide(color: AppColors.primary, width: 2),
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
+                  ),
                   onPressed: () {
                     pageController.nextPage(
                       duration: Duration(milliseconds: 500),
                       curve: Curves.ease,
                     );
                   },
-                  child: Text('Next'),
+                  child: Text('Next',style: TextStyle(fontSize: 18,color: AppColors.white)),
                 ),
               ],
             ),
